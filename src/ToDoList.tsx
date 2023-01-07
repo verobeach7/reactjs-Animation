@@ -8,6 +8,7 @@ interface IForm {
   username: string;
   password: string;
   password1: string;
+  extraError?: string;
 }
 
 function ToDoList() {
@@ -17,13 +18,24 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
-  const onValid = (data: any) => {
-    console.log(data);
+  // 기본적인 유효성검사를 마친 후 폼을 제출하면 비밀번호 일치에 대한 유효성검사를 진행함.
+  const onValid = (data: IForm) => {
+    if (data.password !== data.password1) {
+      // setError의 첫번째 인자는 원하는 error 이름을 지어주면 됨.
+      // error가 발생했을 때 원하는 곳에 focus 설정 가능
+      setError(
+        "password1",
+        { message: "Password are not same." },
+        { shouldFocus: true }
+      );
+    }
+    // setError("extraError", { message: "Server offline." });
   };
   return (
     <div>
@@ -42,8 +54,16 @@ function ToDoList() {
           placeholder="Email"
         />
         <span>{errors?.email?.message}</span>
+
         <input
-          {...register("firstName", { required: "Write here." })}
+          {...register("firstName", {
+            required: "Write here.",
+            // {} 객체를 이용하여 여러가지 조건을 유효성 검사 가능
+            validate: {
+              noNico: (value) => !value.includes("nico") || "No nico allowed.",
+              noNick: (value) => !value.includes("nick") || "No nick allowed.",
+            },
+          })}
           placeholder="First Name"
         />
         <span>{errors?.firstName?.message}</span>
@@ -77,8 +97,8 @@ function ToDoList() {
           placeholder="Password1"
         />
         <span>{errors?.password1?.message}</span>
-
         <button>Add</button>
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
