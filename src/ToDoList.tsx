@@ -1,63 +1,65 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-/* function ToDoList() {
-  const [toDo, setToDo] = useState("");
-  const [toDoError, setToDoError] = useState("");
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setToDoError("");
-    setToDo(value);
-  };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (toDo.length < 10) {
-      return setToDoError("To do should be longer");
-    }
-    console.log(toDo);
-  };
-  return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <input onChange={onChange} value={toDo} placeholder="Write a to do" />
-        <button>Add</button>
-        {toDoError !== "" ? toDoError : null}
-      </form>
-    </div>
-  );
-} */
+interface IForm {
+  email: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+  password1: string;
+}
 
 function ToDoList() {
-  const { register, handleSubmit, formState } = useForm();
-  // onValid는 모든 input의 유효성 검사를 마친 후 실행됨.
+  // interface를 사용하여 type 지정
+  // defaultValues를 이용하여 초기값을 설정 가능
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>({
+    defaultValues: {
+      email: "@naver.com",
+    },
+  });
   const onValid = (data: any) => {
     console.log(data);
   };
-  console.log(formState.errors);
-  // console.log(watch());
   return (
     <div>
-      {/** handleSubmit이 유효성 검사를 마친 후 이상이 없으면 onValid를 호출함 */}
       <form
         style={{ display: "flex", flexDirection: "column" }}
         onSubmit={handleSubmit(onValid)}
       >
-        {/** input tag 내에 required를 하는 경우 코딩할 줄 아는 사람은 inspect의 element에서 required를 삭제하고 보낼 수 있음 */}
-        <input {...register("email", { required: true })} placeholder="Email" />
         <input
-          {...register("firstName", { required: true })}
+          {...register("email", {
+            required: "Email is required.",
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+              message: "Only naver.com emails allowed.",
+            },
+          })}
+          placeholder="Email"
+        />
+        <span>{errors?.email?.message}</span>
+        <input
+          {...register("firstName", { required: "Write here." })}
           placeholder="First Name"
         />
+        <span>{errors?.firstName?.message}</span>
+
         <input
-          {...register("lastName", { required: true })}
+          {...register("lastName", { required: "Write here." })}
           placeholder="Last Name"
         />
+        <span>{errors?.lastName?.message}</span>
+
         <input
-          {...register("username", { required: true, minLength: 10 })}
+          {...register("username", { required: "Write here.", minLength: 10 })}
           placeholder="Username"
         />
+        <span>{errors?.username?.message}</span>
+
         <input
           {...register("password", {
             required: "Password is required.",
@@ -68,10 +70,14 @@ function ToDoList() {
           })}
           placeholder="Password"
         />
+        <span>{errors?.password?.message}</span>
+
         <input
-          {...register("password1", { required: true, minLength: 5 })}
+          {...register("password1", { required: "Write here.", minLength: 5 })}
           placeholder="Password1"
         />
+        <span>{errors?.password1?.message}</span>
+
         <button>Add</button>
       </form>
     </div>
