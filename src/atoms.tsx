@@ -6,24 +6,33 @@ export interface IToDo {
   category: "TO_DO" | "DOING" | "DONE";
 }
 
+export const categoryState = atom({
+  key: "category",
+  default: "TO_DO",
+});
+
 export const toDoState = atom<IToDo[]>({
   key: "toDo",
   default: [],
 });
 
-// atom을 항상 쳐다보고 있음. state에 변화가 생기면 함수를 실행 후 리턴값을 보내줌.
 export const toDoSelector = selector({
   key: "toDoSelector",
   get: ({ get }) => {
-    // get() 함수를 이용하여 toDoState에 있는 데이터를 가져옴
     const toDos = get(toDoState);
+    const category = get(categoryState);
+    return toDos.filter((toDo) => toDo.category === category);
+    /* if (category === "TO_DO")
+      return toDos.filter((toDo) => toDo.category === "TO_DO");
+    if (category === "DOING")
+      return toDos.filter((toDo) => toDo.category === "DOING");
+    if (category === "DONE")
+      return toDos.filter((toDo) => toDo.category === "DONE"); */
+    /* 2차원 배열을 리턴하고 toDoList에서 2차원 배열을 받아서 조건에 따라 보여줄 때
     return [
       toDos.filter((toDo) => toDo.category === "TO_DO"),
       toDos.filter((toDo) => toDo.category === "DOING"),
       toDos.filter((toDo) => toDo.category === "DONE"),
-    ];
-    /* // toDoState atom을 주시
-    const toDos = get(toDoState);
-    return toDos.length; */
+    ]; */
   },
 });
