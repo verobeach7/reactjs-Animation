@@ -4,10 +4,30 @@ import { IToDo, toDoState } from "../atoms";
 
 function ToDo({ text, category, id }: IToDo) {
   const setToDos = useSetRecoilState(toDoState);
+  // onClick 함수를 이용하여 button의 name을 잡아옴.
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
     } = event;
+    setToDos((oldToDos) => {
+      // oldToDo가 어디에 있는지 찾음.
+      const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
+      // newToDo에 category만 변경하여 객체를 만듦.
+      const newToDo = { text, id, category: name as IToDo["category"] };
+      return [
+        ...oldToDos.slice(0, targetIndex),
+        newToDo,
+        ...oldToDos.slice(targetIndex + 1),
+      ];
+    });
+    /* setToDos((prev) =>
+      prev.map((oldToDo) => {
+        if (oldToDo.id === id) {
+          return { text, id, category: name as any };
+        }
+        return oldToDo;
+      })
+    ); */
   };
   return (
     <li>
