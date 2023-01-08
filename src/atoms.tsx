@@ -15,6 +15,7 @@ export const toDoState = atom<IToDo[]>({
 export const toDoSelector = selector({
   key: "toDoSelector",
   get: ({ get }) => {
+    // get() 함수를 이용하여 toDoState에 있는 데이터를 가져옴
     const toDos = get(toDoState);
     return [
       toDos.filter((toDo) => toDo.category === "TO_DO"),
