@@ -54,6 +54,10 @@ table {
   box-sizing: border-box;
 }
 body {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px auto;
   font-family: 'Source Sans Pro', sans-serif;
   line-height: 1.2;
   background-color:${(props) => props.theme.bgColor};
