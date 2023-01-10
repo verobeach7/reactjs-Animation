@@ -48,8 +48,8 @@ blockquote, q {
 }
 blockquote:before, blockquote:after,
 q:before, q:after {
-content: '';
-content: none;
+  content: '';
+  content: none;
 }
 table {
   border-collapse: collapse;
@@ -59,14 +59,11 @@ table {
   box-sizing: border-box;
 }
 body {
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  margin: 50px auto;
+  font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  line-height: 1.2;
   background-color:${(props) => props.theme.bgColor};
-  color:${(props) => props.theme.textColor};
+  color:black;
+  line-height: 1.2;
 }
 a {
   text-decoration: none;
