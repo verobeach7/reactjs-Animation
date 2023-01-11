@@ -28,7 +28,11 @@ function Board({ toDos, boardId }: IBoardProps) {
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
         {(magic) => (
-          <div ref={magic.innerRef} {...magic.droppableProps}>
+          <div
+            style={{ backgroundColor: "red" }}
+            ref={magic.innerRef}
+            {...magic.droppableProps}
+          >
             {toDos.map((toDo, index) => (
               // Beautiful DND에서는 key와 draggableId는 무조건 같아야 함.
               <DraggableCard key={toDo} index={index} toDo={toDo} />
