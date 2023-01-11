@@ -25,6 +25,7 @@ function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDragEnd = (info: DropResult) => {
     console.log(info);
+    // draggableId는 IToDo[] 안의 객체를 받아오며 id 값만 가져옴.
     const { destination, draggableId, source } = info;
     if (!destination) return;
     if (destination?.droppableId === source.droppableId) {

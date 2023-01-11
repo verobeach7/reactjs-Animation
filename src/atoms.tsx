@@ -1,15 +1,19 @@
-import { doesNotMatch } from "assert";
 import { atom, selector } from "recoil";
 
+export interface IToDo {
+  id: number;
+  text: string;
+}
+
 interface IToDoState {
-  [key: string]: string[];
+  [key: string]: IToDo[];
 }
 
 export const toDoState = atom<IToDoState>({
   key: "toDo",
   default: {
-    "To Do": ["a", "b", "e"],
-    Doing: ["c", "d"],
-    Done: ["f"],
+    "To Do": [],
+    Doing: [],
+    Done: [],
   },
 });
