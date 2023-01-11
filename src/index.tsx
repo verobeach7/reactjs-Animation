@@ -35,7 +35,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 /* HTML5 hidden-attribute fix for newer browsers */
 *[hidden] {
-  display: none;
+    display: none;
 }
 body {
   line-height: 1;
@@ -61,15 +61,16 @@ table {
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  background-color:${(props) => props.theme.bgColor};
   color:black;
   line-height: 1.2;
+  background:linear-gradient(135deg,#e09,#d0e);
 }
 a {
-  text-decoration: none;
-  color: inherit;
+  text-decoration:none;
+  color:inherit;
 }
 `;
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
