@@ -24,10 +24,9 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-// ()=>({}) | ()=>{return ...} 함수로 리턴하는 두가지 방법
 const box = {
-  entry: (isBack: boolean) => ({
-    x: isBack ? -500 : 500,
+  entry: (direction: number) => ({
+    x: direction > 0 ? 500 : -500,
     opacity: 0,
     scale: 0,
   }),
@@ -39,8 +38,8 @@ const box = {
       duration: 1,
     },
   },
-  exit: (isBack: boolean) => ({
-    x: isBack ? 500 : -500,
+  exit: (direction: number) => ({
+    x: direction < 0 ? 500 : -500,
     opacity: 0,
     scale: 0,
     transition: {
@@ -50,7 +49,11 @@ const box = {
 };
 
 function App() {
-  const [showing, setShowing] = useState(1);
+  const [[page, direction], setPage] = useState([1, 1]);
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+  /* const [showing, setShowing] = useState(1);
   const [back, setBack] = useState(false);
   const nextShowing = () => {
     setBack(false);
@@ -59,23 +62,23 @@ function App() {
   const prevShowing = () => {
     setBack(true);
     setShowing((prev) => (prev === 1 ? 1 : prev - 1));
-  };
+  }; */
   return (
     <Wrapper>
-      <AnimatePresence custom={back} mode="wait">
+      <AnimatePresence custom={direction}>
         <Box
-          custom={back}
+          custom={direction}
           variants={box}
           initial="entry"
           animate="center"
           exit="exit"
-          key={showing}
+          key={page}
         >
-          {showing}
+          {page}
         </Box>
       </AnimatePresence>
-      <button onClick={prevShowing}>previous</button>
-      <button onClick={nextShowing}>next</button>
+      <button onClick={() => paginate(-1)}>previous</button>
+      <button onClick={() => paginate(1)}>next</button>
     </Wrapper>
   );
 }
