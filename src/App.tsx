@@ -24,13 +24,14 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
+// ()=>({}) | ()=>{return ...} 함수로 리턴하는 두가지 방법
 const box = {
-  invisible: {
-    x: 500,
+  entry: (isBack: boolean) => ({
+    x: isBack ? -500 : 500,
     opacity: 0,
     scale: 0,
-  },
-  visible: {
+  }),
+  center: {
     x: 0,
     opacity: 1,
     scale: 1,
@@ -38,36 +39,40 @@ const box = {
       duration: 1,
     },
   },
-  exit: {
-    x: -500,
+  exit: (isBack: boolean) => ({
+    x: isBack ? 500 : -500,
     opacity: 0,
     scale: 0,
     transition: {
       duration: 1,
     },
-  },
+  }),
 };
 
 function App() {
   const [showing, setShowing] = useState(1);
-  const nextShowing = () => setShowing((prev) => (prev === 5 ? 5 : prev + 1));
-  const prevShowing = () => setShowing((prev) => (prev === 1 ? 1 : prev - 1));
+  const [back, setBack] = useState(false);
+  const nextShowing = () => {
+    setBack(false);
+    setShowing((prev) => (prev === 5 ? 5 : prev + 1));
+  };
+  const prevShowing = () => {
+    setBack(true);
+    setShowing((prev) => (prev === 1 ? 1 : prev - 1));
+  };
   return (
     <Wrapper>
-      <AnimatePresence>
-        {[1, 2, 3, 4, 5].map((i) =>
-          i === showing ? (
-            <Box
-              variants={box}
-              initial="invisible"
-              animate="visible"
-              exit="exit"
-              key={i}
-            >
-              {i}
-            </Box>
-          ) : null
-        )}
+      <AnimatePresence custom={back} mode="wait">
+        <Box
+          custom={back}
+          variants={box}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          key={showing}
+        >
+          {showing}
+        </Box>
       </AnimatePresence>
       <button onClick={prevShowing}>previous</button>
       <button onClick={nextShowing}>next</button>
